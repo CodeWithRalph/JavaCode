@@ -4,6 +4,7 @@
  */
 package com.student.game1;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,6 +32,7 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jButton11 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
@@ -40,11 +42,16 @@ public class NewJFrame extends javax.swing.JFrame {
         jButton31 = new javax.swing.JButton();
         jButton32 = new javax.swing.JButton();
         jButton33 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(500, 500));
-        setSize(new java.awt.Dimension(400, 300));
-        getContentPane().setLayout(new java.awt.GridLayout(3, 3));
+        setMinimumSize(new java.awt.Dimension(500, 550));
+        setSize(new java.awt.Dimension(600, 300));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setLayout(new java.awt.GridLayout(3, 3, 5, 5));
 
         jButton11.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton11.setToolTipText("");
@@ -53,7 +60,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton11);
+        jPanel1.add(jButton11);
 
         jButton12.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton12.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -61,7 +68,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton12);
+        jPanel1.add(jButton12);
 
         jButton13.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton13.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -69,7 +76,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton13);
+        jPanel1.add(jButton13);
 
         jButton21.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton21.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -77,7 +84,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton21);
+        jPanel1.add(jButton21);
 
         jButton22.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton22.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -85,7 +92,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton22);
+        jPanel1.add(jButton22);
 
         jButton23.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton23.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -93,7 +100,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton23);
+        jPanel1.add(jButton23);
 
         jButton31.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton31.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -101,7 +108,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton31);
+        jPanel1.add(jButton31);
 
         jButton32.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton32.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -109,7 +116,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton32);
+        jPanel1.add(jButton32);
 
         jButton33.setFont(new java.awt.Font("Century Gothic", 1, 65)); // NOI18N
         jButton33.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -117,19 +124,34 @@ public class NewJFrame extends javax.swing.JFrame {
                 jButtonClicked(evt);
             }
         });
-        getContentPane().add(jButton33);
+        jPanel1.add(jButton33);
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 400, 400));
+        jPanel1.getAccessibleContext().setAccessibleName("");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Its O turn");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 140, 20));
+
+        jLabel2.setText("O win count: 0");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, -1, -1));
+
+        jLabel3.setText("X win count: 0");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClicked
         JButton theButton = (JButton)evt.getSource();
-        if (theButton.getText() != ""){
-            return;
-        }
-        theButton.setText((shape==1)? "X": "O");
-        shape = (shape == 1)? 0:1; 
+        if (theButton.getText().equals("")){
+            theButton.setText((shape==1)? "X": "O");
+        shape = (shape == 1)? 0:1;
+        String nextLetter = (shape == 0)? "O":"X";
+        jLabel1.setText("Its " + nextLetter + " turn");
         checkWinner();
+        }
+        
     }//GEN-LAST:event_jButtonClicked
 
     /**
@@ -177,10 +199,85 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
     private javax.swing.JButton jButton33;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
     private void checkWinner() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        jButton11
+        String winnerPattern = "";
+        
+        // row 1
+        winnerPattern += jButton11.getText();
+        winnerPattern += jButton12.getText();
+        winnerPattern += jButton13.getText();
+        winnerPattern += " ";
+        
+        // row 2
+        winnerPattern += jButton21.getText();
+        winnerPattern += jButton22.getText();
+        winnerPattern += jButton23.getText();
+        winnerPattern += " ";
+        
+        // row 3
+        winnerPattern += jButton31.getText();
+        winnerPattern += jButton32.getText();
+        winnerPattern += jButton33.getText();
+        winnerPattern += " ";
+        
+        // col 1
+        winnerPattern += jButton11.getText();
+        winnerPattern += jButton21.getText();
+        winnerPattern += jButton31.getText();
+        winnerPattern += " ";
+        
+        // col 2
+        winnerPattern += jButton12.getText();
+        winnerPattern += jButton22.getText();
+        winnerPattern += jButton32.getText();
+        winnerPattern += " ";
+        
+        // col 3
+        winnerPattern += jButton11.getText();
+        winnerPattern += jButton22.getText();
+        winnerPattern += jButton33.getText();
+        winnerPattern += " ";
+        
+        // diag 1
+        winnerPattern += jButton11.getText();
+        winnerPattern += jButton22.getText();
+        winnerPattern += jButton33.getText();
+        winnerPattern += " ";
+        
+        // diag 2
+        winnerPattern += jButton13.getText();
+        winnerPattern += jButton22.getText();
+        winnerPattern += jButton31.getText();
+        winnerPattern += " ";
+        
+        // Display the winner
+        if (winnerPattern.contains("XXX") || winnerPattern.contains("OOO")){
+            String letterWinner;
+            if (winnerPattern.contains("XXX")){
+                letterWinner = "X";
+            }else{
+                letterWinner = "O";
+            }
+            JOptionPane.showMessageDialog(this, "We have a winner. Letter " + letterWinner);
+            clearBoard();
+        }
+    }
+
+    private void clearBoard() {
+        jButton11.setText("");
+        jButton12.setText("");
+        jButton13.setText("");
+        jButton21.setText("");
+        jButton22.setText("");
+        jButton23.setText("");
+        jButton31.setText("");
+        jButton32.setText("");
+        jButton33.setText("");
     }
 }
