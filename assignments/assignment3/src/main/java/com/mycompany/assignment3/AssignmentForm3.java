@@ -56,15 +56,17 @@ public class AssignmentForm3 extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.BorderLayout(0, 5));
 
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Cigar? Toss it in a can. It is so tragic.");
+        jTextArea1.setToolTipText("");
         getContentPane().add(jTextArea1, java.awt.BorderLayout.PAGE_START);
 
-        jLabelPalindrome.setFont(new java.awt.Font("Consolas", 1, 12)); // NOI18N
+        jLabelPalindrome.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
         jLabelPalindrome.setText("Is it a palindrome?");
 
-        jButtonAnalyse.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButtonAnalyse.setText("ANALYSE!");
+        jButtonAnalyse.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButtonAnalyse.setText("Check");
         jButtonAnalyse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAnalyse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,19 +80,19 @@ public class AssignmentForm3 extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jLabelPalindrome, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jButtonAnalyse)
-                .addContainerGap())
+                .addComponent(jLabelPalindrome, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonAnalyse, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelPalindrome)
                     .addComponent(jButtonAnalyse))
-                .addGap(5, 5, 5))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -135,8 +137,8 @@ public class AssignmentForm3 extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -152,7 +154,7 @@ public class AssignmentForm3 extends javax.swing.JFrame {
                     .addComponent(jLabelAns2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelAns1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelAns6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,18 +259,24 @@ public class AssignmentForm3 extends javax.swing.JFrame {
         // to upper case the entire string
         for (int index = 0; index < text.length(); index++) {
             char character = textArray[index];
+            // check if alphabetic
             if (Character.isAlphabetic(character)) {
                 if (Character.isLowerCase(character)) {
                     cleanText.append(Character.toUpperCase(character));
                 } else {
                     cleanText.append(character);
                 }
+            } // check if numeric or digit
+            else if (Character.isDigit(character)) {
+                cleanText.append(character);
             }
         }
         // get the length of half of cleaned string text
         int halfLength = (int) cleanText.length() / 2;
         String firstHalf = cleanText.substring(0, halfLength);
         String secondHalf = cleanText.reverse().substring(0, halfLength);
+        
+        // return if the first half is equal to second half
         return firstHalf.equals(secondHalf);
     }
 
@@ -312,7 +320,7 @@ public class AssignmentForm3 extends javax.swing.JFrame {
     }
 
     private void displayStatistics(int[] numberOfCharArray) {
-        for (int index=0; index < numberOfCharArray.length; index++){
+        for (int index = 0; index < numberOfCharArray.length; index++) {
             jLabelStats[index].setText(Integer.toString(numberOfCharArray[index]));
         }
     }

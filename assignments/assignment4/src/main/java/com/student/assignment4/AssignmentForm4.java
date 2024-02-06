@@ -4,8 +4,8 @@
  */
 package com.student.assignment4;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.File;
+import java.util.Scanner;
 
 /**
  *
@@ -18,6 +18,8 @@ public class AssignmentForm4 extends javax.swing.JFrame {
     private int numberOfField = 0;
     private int numberOfPrecision = 0;
     private int numberOfColumns = 0;
+    private File inputFile;
+    private File outputFile;
 
     /**
      * Creates new form assignmentForm4
@@ -221,42 +223,51 @@ public class AssignmentForm4 extends javax.swing.JFrame {
     }
 
     private void checkFieldValue() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // TODO
     }
 
     private void checkPrecisionValue() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // TODO
     }
 
     private void checkNumberOfColumns() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // TODO
     }
-    
+
     private void getUserInput() {
         checkInputFile();
         createOuputFile();
         checkUserInput();
+        closeFiles();
     }
 
     private void checkInputFile() {
-        inputFileName = jTextFieldInputFile.getText();
-        try{
-            FileReader inputFile = new FileReader(inputFileName);
-        }
-        catch(FileNotFoundException fileError){
+        inputFileName = System.getProperty("user.dir") + "\\"+jTextFieldInputFile.getText();
+        Scanner sc;
+        try {
+            sc = new Scanner(inputFileName);
+            while (sc.hasNext()) {
+                System.out.println(sc.nextLine());
+            }
+        } catch (Exception e) {
             System.out.println("File not found");
         }
+
     }
 
     private void createOuputFile() {
         outputFileName = jTextFieldOutputFile.getText();
-        try{
-            FileReader outputFile = new FileReader(outputFileName);
-        }
-        catch(FileNotFoundException fileError){
+        try {
+            outputFile = new Scanner(outputFileName);
+        } catch (Exception e) {
             System.out.println("File not found");
         }
-    
+
     }
-    
+
+    private void closeFiles() {
+        inputFile.close();
+        outputFile.close();
+    }
+
 }
