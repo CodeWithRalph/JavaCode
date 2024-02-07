@@ -6,8 +6,8 @@ package com.student.assignment4;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.io.IOException;
+import java.math.*;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class AssignmentForm4 extends javax.swing.JFrame {
         jTextFieldNumberOfPrecision.setText("3");
 
         jTextFieldNumberOfColumns.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldNumberOfColumns.setText("1");
+        jTextFieldNumberOfColumns.setText("2");
 
         jLabelNumberOfField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelNumberOfField.setText("Number of Field Width (0-15)");
@@ -197,7 +197,7 @@ public class AssignmentForm4 extends javax.swing.JFrame {
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcessActionPerformed
         isUserInputOK = true;
         numberListInput.clear();
-        getUserInput();
+        getUserInput(evt);
 
         // check the input and output files
         checkInputFile();
@@ -210,12 +210,12 @@ public class AssignmentForm4 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonProcessActionPerformed
 
-    private void getUserInput() {
+    private void getUserInput(java.awt.event.ActionEvent evt) {
         getInputFileName();
         getOutputFileName();
-        getNumberOfField();
-        getNumberOfPrecision();
-        getNumberOfColumns();
+        getNumberOfField(evt);
+        getNumberOfPrecision(evt);
+        getNumberOfColumns(evt);
     }
 
     /**
@@ -284,52 +284,41 @@ public class AssignmentForm4 extends javax.swing.JFrame {
         outputFileName = jTextFieldOutputFile.getText();
     }
 
-    private void getNumberOfField() {
-        try {
-            numberOfField = Integer.decode(jTextFieldNumberField.getText());
-            if (numberOfField < 0 || numberOfField > 15) {
-                throw new NumberFormatException();
-            }
-        } catch (NumberFormatException error) {
+    private void getNumberOfField(java.awt.event.ActionEvent evt) {
+        numberOfField = Integer.decode(jTextFieldNumberField.getText());
+        if (numberOfField < 0 || numberOfField > 15) {
             JOptionPane.showMessageDialog(this, "Invalid Number of Field value");
             isUserInputOK = false;
         }
     }
 
-    private void getNumberOfPrecision() {
-        try {
-            numberOfPrecision = Integer.decode(jTextFieldNumberOfPrecision.getText());
-            if (numberOfPrecision < 0 || numberOfPrecision > 15) {
-                throw new NumberFormatException();
-            }
-        } catch (NumberFormatException error) {
+    private void getNumberOfPrecision(java.awt.event.ActionEvent evt) {
+        if (!isUserInputOK) {
+            return;
+        }
+        numberOfPrecision = Integer.decode(jTextFieldNumberOfPrecision.getText());
+        if (numberOfPrecision < 0 || numberOfPrecision > 15) {
             JOptionPane.showMessageDialog(this, "Invalid Number of Precision value");
             isUserInputOK = false;
         }
     }
 
-    private void getNumberOfColumns() {
-        try {
-            numberOfColumns = Integer.decode(jTextFieldNumberOfColumns.getText());
-            if (numberOfColumns < 1 || numberOfColumns > 5) {
-                throw new NumberFormatException();
-            }
-        } catch (NumberFormatException error) {
+    private void getNumberOfColumns(java.awt.event.ActionEvent evt) {
+        if (!isUserInputOK) {
+            return;
+        }
+        numberOfColumns = Integer.decode(jTextFieldNumberOfColumns.getText());
+        if (numberOfColumns < 1 || numberOfColumns > 5) {
             JOptionPane.showMessageDialog(this, "Invalid Number of Columns value");
             isUserInputOK = false;
         }
     }
 
     private void checkInputFile() {
-        if (inputFileName.equals("")) {
-            JOptionPane.showMessageDialog(this, "Please enter correct input file name.");
-            isUserInputOK = false;
-        } else if (inputFileName.contains("\\")) {
-            inputFile = new File(inputFileName);
-        } else {
-            inputFile = new File(System.getProperty("user.dir") + "\\"
-                    + inputFileName);
+        if (!isUserInputOK) {
+            return;
         }
+        inputFile = new File(inputFileName);
         if (!inputFile.isFile() && isUserInputOK) {
             JOptionPane.showMessageDialog(this, "Input file not found! " + inputFile.getAbsolutePath());
             isUserInputOK = false;
@@ -337,15 +326,10 @@ public class AssignmentForm4 extends javax.swing.JFrame {
     }
 
     private void checkOutputFile() {
-        if (outputFileName.equals("") && isUserInputOK) {
-            JOptionPane.showMessageDialog(this, "Please enter correct output file name.");
-            isUserInputOK = false;
-        } else if (outputFileName.contains("\\")) {
-            outputFile = new File(outputFileName);
-        } else {
-            outputFile = new File(System.getProperty("user.dir") + "\\"
-                    + outputFileName);
+        if (!isUserInputOK) {
+            return;
         }
+        outputFile = new File(outputFileName);
         if (!outputFile.isFile() && isUserInputOK) {
             JOptionPane.showMessageDialog(this, "Output file not found! " + outputFile.getAbsolutePath());
             isUserInputOK = false;
@@ -358,9 +342,7 @@ public class AssignmentForm4 extends javax.swing.JFrame {
             while (scInput.hasNext()) {
                 BigDecimal number = scInput.nextBigDecimal();
                 numberListInput.add(number);
-                if (maxValue < number.intValue()) {
-                    maxValue = number.intValue();
-                }
+                maxValue = Math.max(number.intValue(), number.intValue());
             }
             scInput.close();
         } catch (Exception error) {
@@ -376,26 +358,33 @@ public class AssignmentForm4 extends javax.swing.JFrame {
             int maxValueLength = String.valueOf(maxValue).length();
             String stringFormat = "%." + Integer.toString(numberOfField) + "f";
             for (BigDecimal number : numberListInput) {
-                String numberString = String.format(stringFormat, number.setScale(numberOfPrecision, RoundingMode.HALF_UP));
-                // Insert a space before the float as String
-                for (int space = numberString.split("\\.")[0].length(); space < maxValueLength; space++) {
+                // round the float to precision value and convert to String
+                String numberString = String.format(stringFormat,
+                        number.setScale(numberOfPrecision, RoundingMode.HALF_UP));
+                // Insert a space before the float value as String
+                int space = numberString.split("\\.")[0].length();
+                for (; space < maxValueLength; space++) {
                     numberString = " " + numberString;
                 }
+                // add the number as String to the final output String
                 outputText += numberString;
+                // add a space between columns
                 if (colNum < numberOfColumns) {
-                    outputText += "    ";
+                    outputText += "   ";
                 }
                 colNum++;
+                // set column back to 1 when greater then number of columns
                 if (colNum > numberOfColumns) {
-                    outputText += "\n";
+                    outputText += String.format("%n", "");
                     colNum = 1;
                 }
             }
             fwOuput.write(outputText);
             fwOuput.close();
             JOptionPane.showMessageDialog(this,
-                    "Program successfully completed. Please open " + outputFileName + " file.");
-        } catch (Exception error) {
+                    "Program successfully completed. Please open "
+                    + outputFileName + " file.");
+        } catch (IOException error) {
             JOptionPane.showMessageDialog(this, error.getMessage());
         }
     }
