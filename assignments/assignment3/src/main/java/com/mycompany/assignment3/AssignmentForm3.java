@@ -278,7 +278,7 @@ public class AssignmentForm3 extends javax.swing.JFrame {
         // get the reversed clean String text and get its first half
         // technically the second half
         String secondHalf = cleanText.reverse().substring(0, halfLength);
-        
+
         // return if the first half is equal to second half
         return firstHalf.equals(secondHalf);
     }
@@ -294,24 +294,29 @@ public class AssignmentForm3 extends javax.swing.JFrame {
         // Loop and count the Character category for the entire string
         for (int index = 0; index < text.length(); index++) {
             char character = textArray[index];
-            if (Character.isAlphabetic(character)) {
+            // add letter count
+            if (Character.isLetter(character)) {
                 numOfalphabet++;
+                // add lower case count
                 if (Character.isLowerCase(character)) {
                     numOfLowerCase++;
-                } else {
+                }// add upper case count
+                else {
                     numOfUpperCase++;
                 }
-            } else if (Character.isDigit(character)) {
+            } // add digit count
+            else if (Character.isDigit(character)) {
                 numOfNumeric++;
-            } else if (Character.isISOControl(character)) {
+            } // add ISO Control count
+            else if (Character.isISOControl(character)) {
                 numOfControl++;
-            } else if (Character.isWhitespace(character)) {
+            }// add white space count
+            else if (Character.isWhitespace(character)) {
                 numOfWhitespace++;
             }
         }
-        int[] numberStat = {numOfalphabet, numOfNumeric, numOfControl,
+        return new int[]{numOfalphabet, numOfNumeric, numOfControl,
             numOfLowerCase, numOfUpperCase, numOfWhitespace};
-        return numberStat;
     }
 
     private void displayResult(boolean isiTPalindrome) {
