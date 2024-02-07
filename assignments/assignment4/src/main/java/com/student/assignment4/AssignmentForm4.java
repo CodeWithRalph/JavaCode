@@ -5,7 +5,13 @@
 package com.student.assignment4;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,11 +21,14 @@ public class AssignmentForm4 extends javax.swing.JFrame {
 
     private String inputFileName = "";
     private String outputFileName = "";
+    private File inputFile;
+    private File outputFile;
     private int numberOfField = 0;
     private int numberOfPrecision = 0;
     private int numberOfColumns = 0;
-    private File inputFile;
-    private File outputFile;
+    private List<BigDecimal> numberListInput = new ArrayList<>();
+    private boolean isUserInputOK;
+    int maxValue = 0;
 
     /**
      * Creates new form assignmentForm4
@@ -39,17 +48,17 @@ public class AssignmentForm4 extends javax.swing.JFrame {
 
         jTextFieldInputFile = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldOutputFile = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jTextFieldOutputFile = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jButtonProcess = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabelNumberOfField = new javax.swing.JLabel();
         jTextFieldNumberField = new javax.swing.JTextField();
         jLabelNumberOfPrecision = new javax.swing.JLabel();
         jTextFieldNumberOfPrecision = new javax.swing.JTextField();
-        jLabelNumberOfColumns = new javax.swing.JLabel();
         jTextFieldNumberOfColumns = new javax.swing.JTextField();
+        jLabelNumberOfField = new javax.swing.JLabel();
+        jLabelNumberOfColumns = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -60,16 +69,16 @@ public class AssignmentForm4 extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Input File");
 
-        jTextFieldOutputFile.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldOutputFile.setText("output.txt");
-
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Output File");
+
+        jTextFieldOutputFile.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextFieldOutputFile.setText("output.txt");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Settings:");
 
-        jButtonProcess.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButtonProcess.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jButtonProcess.setText("Process");
         jButtonProcess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,44 +86,70 @@ public class AssignmentForm4 extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setLayout(new java.awt.GridLayout(3, 2, 0, 6));
-
-        jLabelNumberOfField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelNumberOfField.setText("Number of Field width");
-        jPanel1.add(jLabelNumberOfField);
-
         jTextFieldNumberField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldNumberField.setText("2");
-        jPanel1.add(jTextFieldNumberField);
+        jTextFieldNumberField.setText("6");
 
         jLabelNumberOfPrecision.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelNumberOfPrecision.setText("Number of Precision");
-        jPanel1.add(jLabelNumberOfPrecision);
+        jLabelNumberOfPrecision.setText("Number of Precision (0-15)");
 
         jTextFieldNumberOfPrecision.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldNumberOfPrecision.setText("2");
-        jPanel1.add(jTextFieldNumberOfPrecision);
+        jTextFieldNumberOfPrecision.setText("3");
+
+        jTextFieldNumberOfColumns.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextFieldNumberOfColumns.setText("1");
+
+        jLabelNumberOfField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelNumberOfField.setText("Number of Field Width (0-15)");
 
         jLabelNumberOfColumns.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelNumberOfColumns.setText("Number of Columns (1-5)");
-        jPanel1.add(jLabelNumberOfColumns);
 
-        jTextFieldNumberOfColumns.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldNumberOfColumns.setText("3");
-        jPanel1.add(jTextFieldNumberOfColumns);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelNumberOfColumns, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldNumberOfColumns, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelNumberOfPrecision, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldNumberOfPrecision, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelNumberOfField, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(86, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNumberOfField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldNumberOfPrecision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelNumberOfPrecision, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNumberOfColumns, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNumberOfColumns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonProcess)
-                .addGap(21, 21, 21))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(30, 30, 30)
@@ -124,9 +159,17 @@ public class AssignmentForm4 extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldOutputFile))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(46, 46, 46)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,25 +178,45 @@ public class AssignmentForm4 extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldInputFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldOutputFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonProcess)
-                .addGap(20, 20, 20))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcessActionPerformed
+        isUserInputOK = true;
+        numberListInput.clear();
         getUserInput();
+
+        // check the input and output files
+        checkInputFile();
+        checkOutputFile();
+
+        // all inputs should be ok before reading and writing a file
+        if (isUserInputOK) {
+            readInputFile();
+            writeOutputFile();
+        }
     }//GEN-LAST:event_jButtonProcessActionPerformed
+
+    private void getUserInput() {
+        getInputFileName();
+        getOutputFileName();
+        getNumberOfField();
+        getNumberOfPrecision();
+        getNumberOfColumns();
+    }
 
     /**
      * @param args the command line arguments
@@ -213,61 +276,127 @@ public class AssignmentForm4 extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldOutputFile;
     // End of variables declaration//GEN-END:variables
 
-    private void checkUserInput() {
-        // check field value
-        checkFieldValue();
-        // check precision value
-        checkPrecisionValue();
-        // check number of columns value
-        checkNumberOfColumns();
+    private void getInputFileName() {
+        inputFileName = jTextFieldInputFile.getText();
     }
 
-    private void checkFieldValue() {
-        // TODO
+    private void getOutputFileName() {
+        outputFileName = jTextFieldOutputFile.getText();
     }
 
-    private void checkPrecisionValue() {
-        // TODO
+    private void getNumberOfField() {
+        try {
+            numberOfField = Integer.decode(jTextFieldNumberField.getText());
+            if (numberOfField < 0 || numberOfField > 15) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException error) {
+            JOptionPane.showMessageDialog(this, "Invalid Number of Field value");
+            isUserInputOK = false;
+        }
     }
 
-    private void checkNumberOfColumns() {
-        // TODO
+    private void getNumberOfPrecision() {
+        try {
+            numberOfPrecision = Integer.decode(jTextFieldNumberOfPrecision.getText());
+            if (numberOfPrecision < 0 || numberOfPrecision > 15) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException error) {
+            JOptionPane.showMessageDialog(this, "Invalid Number of Precision value");
+            isUserInputOK = false;
+        }
     }
 
-    private void getUserInput() {
-        checkInputFile();
-        createOuputFile();
-        checkUserInput();
-        closeFiles();
+    private void getNumberOfColumns() {
+        try {
+            numberOfColumns = Integer.decode(jTextFieldNumberOfColumns.getText());
+            if (numberOfColumns < 1 || numberOfColumns > 5) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException error) {
+            JOptionPane.showMessageDialog(this, "Invalid Number of Columns value");
+            isUserInputOK = false;
+        }
     }
 
     private void checkInputFile() {
-        inputFileName = System.getProperty("user.dir") + "\\"+jTextFieldInputFile.getText();
-        Scanner sc;
+        if (inputFileName.equals("")) {
+            JOptionPane.showMessageDialog(this, "Please enter correct input file name.");
+            isUserInputOK = false;
+        } else if (inputFileName.contains("\\")) {
+            inputFile = new File(inputFileName);
+        } else {
+            inputFile = new File(System.getProperty("user.dir") + "\\"
+                    + inputFileName);
+        }
+        if (!inputFile.isFile() && isUserInputOK) {
+            JOptionPane.showMessageDialog(this, "Input file not found! " + inputFile.getAbsolutePath());
+            isUserInputOK = false;
+        }
+    }
+
+    private void checkOutputFile() {
+        if (outputFileName.equals("") && isUserInputOK) {
+            JOptionPane.showMessageDialog(this, "Please enter correct output file name.");
+            isUserInputOK = false;
+        } else if (outputFileName.contains("\\")) {
+            outputFile = new File(outputFileName);
+        } else {
+            outputFile = new File(System.getProperty("user.dir") + "\\"
+                    + outputFileName);
+        }
+        if (!outputFile.isFile() && isUserInputOK) {
+            JOptionPane.showMessageDialog(this, "Output file not found! " + outputFile.getAbsolutePath());
+            isUserInputOK = false;
+        }
+    }
+
+    private void readInputFile() {
         try {
-            sc = new Scanner(inputFileName);
-            while (sc.hasNext()) {
-                System.out.println(sc.nextLine());
+            Scanner scInput = new Scanner(inputFile);
+            while (scInput.hasNext()) {
+                BigDecimal number = scInput.nextBigDecimal();
+                numberListInput.add(number);
+                if (maxValue < number.intValue()) {
+                    maxValue = number.intValue();
+                }
             }
-        } catch (Exception e) {
-            System.out.println("File not found");
+            scInput.close();
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, error.getMessage());
         }
-
     }
 
-    private void createOuputFile() {
-        outputFileName = jTextFieldOutputFile.getText();
+    private void writeOutputFile() {
         try {
-            outputFile = new Scanner(outputFileName);
-        } catch (Exception e) {
-            System.out.println("File not found");
+            FileWriter fwOuput = new FileWriter(outputFile);
+            String outputText = "";
+            int colNum = 1;
+            int maxValueLength = String.valueOf(maxValue).length();
+            String stringFormat = "%." + Integer.toString(numberOfField) + "f";
+            for (BigDecimal number : numberListInput) {
+                String numberString = String.format(stringFormat, number.setScale(numberOfPrecision, RoundingMode.HALF_UP));
+                // Insert a space before the float as String
+                for (int space = numberString.split("\\.")[0].length(); space < maxValueLength; space++) {
+                    numberString = " " + numberString;
+                }
+                outputText += numberString;
+                if (colNum < numberOfColumns) {
+                    outputText += "    ";
+                }
+                colNum++;
+                if (colNum > numberOfColumns) {
+                    outputText += "\n";
+                    colNum = 1;
+                }
+            }
+            fwOuput.write(outputText);
+            fwOuput.close();
+            JOptionPane.showMessageDialog(this,
+                    "Program successfully completed. Please open " + outputFileName + " file.");
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, error.getMessage());
         }
-
     }
-
-    private void closeFiles() {
-        inputFile.close();
-        outputFile.close();
-    }
-
 }
