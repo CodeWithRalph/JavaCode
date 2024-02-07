@@ -255,8 +255,8 @@ public class AssignmentForm3 extends javax.swing.JFrame {
     private boolean isPalindrome(String text) {
         StringBuilder cleanText = new StringBuilder();
         char[] textArray = text.toCharArray();
-        // Loop, clean(remove non alphabetic), and convert all
-        // to upper case the entire string
+        // Loop, clean(remove non alphabetic and non digits),
+        // and convert all to upper case the entire string
         for (int index = 0; index < text.length(); index++) {
             char character = textArray[index];
             // check if alphabetic
@@ -273,7 +273,10 @@ public class AssignmentForm3 extends javax.swing.JFrame {
         }
         // get the length of half of cleaned string text
         int halfLength = (int) cleanText.length() / 2;
+        // get the first half of cleaned String text
         String firstHalf = cleanText.substring(0, halfLength);
+        // get the reversed clean String text and get its first half
+        // technically the second half
         String secondHalf = cleanText.reverse().substring(0, halfLength);
         
         // return if the first half is equal to second half
