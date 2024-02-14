@@ -43,7 +43,7 @@ public class Week06BasicIOForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("C:\\Temp\\Nobel Winners.txt");
+        jTextField1.setText("Nobel Winners.txt");
 
         jButton1.setText("Show File");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
