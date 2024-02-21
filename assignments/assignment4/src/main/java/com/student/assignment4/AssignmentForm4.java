@@ -4,7 +4,11 @@
  */
 package com.student.assignment4;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.*;
@@ -64,7 +68,6 @@ public class AssignmentForm4 extends javax.swing.JFrame {
         setResizable(false);
 
         jTextFieldInputFile.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldInputFile.setText("random.txt");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Input File");
@@ -73,7 +76,6 @@ public class AssignmentForm4 extends javax.swing.JFrame {
         jLabel2.setText("Output File");
 
         jTextFieldOutputFile.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldOutputFile.setText("output.txt");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Settings:");
@@ -87,16 +89,13 @@ public class AssignmentForm4 extends javax.swing.JFrame {
         });
 
         jTextFieldNumberField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldNumberField.setText("6");
 
         jLabelNumberOfPrecision.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelNumberOfPrecision.setText("Number of Precision (0-15)");
 
         jTextFieldNumberOfPrecision.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldNumberOfPrecision.setText("3");
 
         jTextFieldNumberOfColumns.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldNumberOfColumns.setText("2");
 
         jLabelNumberOfField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelNumberOfField.setText("Number of Field Width (0-15)");
@@ -197,26 +196,27 @@ public class AssignmentForm4 extends javax.swing.JFrame {
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcessActionPerformed
         isUserInputOK = true;
         numberListInput.clear();
-        getUserInput(evt);
+
+        // get input field and check input file
+        getInputFileName();
+        checkInputFile();
+        
+        // get output field and check output file
+        getOutputFileName();
+        checkOutputFile();
+        
+        // check field value
+        getNumberOfField();
+        getNumberOfPrecision();
+        getNumberOfColumns();
 
         // check the input and output files
-        checkInputFile();
-        checkOutputFile();
-
-        // all inputs should be ok before reading and writing a file
+        // read and write output files only if all user inputs are accepted
         if (isUserInputOK) {
             readInputFile();
             writeOutputFile();
         }
     }//GEN-LAST:event_jButtonProcessActionPerformed
-
-    private void getUserInput(java.awt.event.ActionEvent evt) {
-        getInputFileName();
-        getOutputFileName();
-        getNumberOfField(evt);
-        getNumberOfPrecision(evt);
-        getNumberOfColumns(evt);
-    }
 
     /**
      * @param args the command line arguments
@@ -278,81 +278,110 @@ public class AssignmentForm4 extends javax.swing.JFrame {
 
     private void getInputFileName() {
         inputFileName = jTextFieldInputFile.getText();
+        if (inputFileName.isBlank()) {
+            isUserInputOK = false;
+            JOptionPane.showMessageDialog(this, "Input file is blank!");
+        }
     }
 
     private void getOutputFileName() {
         outputFileName = jTextFieldOutputFile.getText();
-    }
-
-    private void getNumberOfField(java.awt.event.ActionEvent evt) {
-        numberOfField = Integer.decode(jTextFieldNumberField.getText());
-        if (numberOfField < 0 || numberOfField > 15) {
-            JOptionPane.showMessageDialog(this, "Invalid Number of Field value");
+        if (isUserInputOK && outputFileName.isBlank()) {
             isUserInputOK = false;
+            JOptionPane.showMessageDialog(this, "Output file is blank!");
         }
     }
 
-    private void getNumberOfPrecision(java.awt.event.ActionEvent evt) {
-        if (!isUserInputOK) {
-            return;
-        }
-        numberOfPrecision = Integer.decode(jTextFieldNumberOfPrecision.getText());
-        if (numberOfPrecision < 0 || numberOfPrecision > 15) {
-            JOptionPane.showMessageDialog(this, "Invalid Number of Precision value");
-            isUserInputOK = false;
+    private void getNumberOfField() {
+        if (isUserInputOK) {
+            String errorMessage = "Invalid Number of Field value";
+            boolean isFieldBlank = jTextFieldNumberField.getText().isBlank();
+            if (isFieldBlank) {
+                JOptionPane.showMessageDialog(this, errorMessage);
+                isUserInputOK = false;
+            } else {
+                numberOfField = Integer.decode(jTextFieldNumberField.getText());
+                if (numberOfField < 0 || numberOfField > 15) {
+                    JOptionPane.showMessageDialog(this, errorMessage);
+                    isUserInputOK = false;
+                }
+            }
         }
     }
 
-    private void getNumberOfColumns(java.awt.event.ActionEvent evt) {
-        if (!isUserInputOK) {
-            return;
+    private void getNumberOfPrecision() {
+        if (isUserInputOK) {
+            String errorMessage = "Invalid Number of Precision value";
+            boolean isFieldBlank = jTextFieldNumberOfPrecision.getText().isBlank();
+            if (isFieldBlank) {
+                JOptionPane.showMessageDialog(this, errorMessage);
+                isUserInputOK = false;
+            } else {
+                numberOfPrecision = Integer.decode(jTextFieldNumberOfPrecision.getText());
+                if (numberOfPrecision < 0 || numberOfPrecision > 15) {
+                    JOptionPane.showMessageDialog(this, errorMessage);
+                    isUserInputOK = false;
+                }
+            }
         }
-        numberOfColumns = Integer.decode(jTextFieldNumberOfColumns.getText());
-        if (numberOfColumns < 1 || numberOfColumns > 5) {
-            JOptionPane.showMessageDialog(this, "Invalid Number of Columns value");
-            isUserInputOK = false;
+    }
+
+    private void getNumberOfColumns() {
+        if (isUserInputOK) {
+            String errorMessage = "Invalid Number of Columns value";
+            boolean isFieldBlank = jTextFieldNumberOfColumns.getText().isBlank();
+            if (isFieldBlank) {
+                JOptionPane.showMessageDialog(this, errorMessage);
+                isUserInputOK = false;
+            } else {
+                numberOfColumns = Integer.decode(jTextFieldNumberOfColumns.getText());
+                if (numberOfColumns < 1 || numberOfColumns > 5) {
+                    JOptionPane.showMessageDialog(this, errorMessage);
+                    isUserInputOK = false;
+                }
+            }
         }
     }
 
     private void checkInputFile() {
-        if (!isUserInputOK) {
-            return;
-        }
-        inputFile = new File(inputFileName);
-        if (!inputFile.isFile() && isUserInputOK) {
-            JOptionPane.showMessageDialog(this, "Input file not found! " + inputFile.getAbsolutePath());
-            isUserInputOK = false;
+        if (isUserInputOK) {
+            inputFile = new File(inputFileName);
+            if (!inputFile.isFile() && isUserInputOK) {
+                JOptionPane.showMessageDialog(this, "Input file not found! "
+                        + inputFile.getAbsolutePath());
+                isUserInputOK = false;
+            }
         }
     }
 
     private void checkOutputFile() {
-        if (!isUserInputOK) {
-            return;
-        }
-        outputFile = new File(outputFileName);
-        if (!outputFile.isFile() && isUserInputOK) {
-            JOptionPane.showMessageDialog(this, "Output file not found! " + outputFile.getAbsolutePath());
-            isUserInputOK = false;
+        if (isUserInputOK) {
+            outputFile = new File(outputFileName);
+            if (outputFile.isFile() && isUserInputOK) {
+                JOptionPane.showMessageDialog(this, "Output file exists! "
+                        + outputFile.getAbsolutePath());
+                isUserInputOK = false;
+            }
         }
     }
 
     private void readInputFile() {
         try {
-            Scanner scInput = new Scanner(inputFile);
+            Scanner scInput = new Scanner(new BufferedReader(new FileReader(inputFile)));
             while (scInput.hasNext()) {
                 BigDecimal number = scInput.nextBigDecimal();
                 numberListInput.add(number);
                 maxValue = Math.max(number.intValue(), number.intValue());
             }
             scInput.close();
-        } catch (Exception error) {
+        } catch (FileNotFoundException error) {
             JOptionPane.showMessageDialog(this, error.getMessage());
         }
     }
 
     private void writeOutputFile() {
         try {
-            FileWriter fwOuput = new FileWriter(outputFile);
+            BufferedWriter bufFileOutput = new BufferedWriter(new FileWriter(outputFile));
             String outputText = "";
             int colNum = 1;
             int maxValueLength = String.valueOf(maxValue).length();
@@ -379,8 +408,8 @@ public class AssignmentForm4 extends javax.swing.JFrame {
                     colNum = 1;
                 }
             }
-            fwOuput.write(outputText);
-            fwOuput.close();
+            bufFileOutput.write(outputText);
+            bufFileOutput.close();
             JOptionPane.showMessageDialog(this,
                     "Program successfully completed. Please open "
                     + outputFileName + " file.");
